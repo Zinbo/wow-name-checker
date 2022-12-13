@@ -1,0 +1,8 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          wow:
+            clientId: ${WOW_CLIENT_ID}
+            clientSecret: ${WOW_CLIENT_SECRET}
