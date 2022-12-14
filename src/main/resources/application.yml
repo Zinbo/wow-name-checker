@@ -6,3 +6,14 @@ spring:
           wow:
             clientId: ${WOW_CLIENT_ID}
             clientSecret: ${WOW_CLIENT_SECRET}
+            authorization-grant-type: client_credentials
+        provider:
+          wow:
+            authorization-uri: https://oauth.battle.net/authorize
+            token-uri: https://oauth.battle.net/token
+
+
+
+clients:
+  wow:
+    url: https://%s.api.blizzard.com
