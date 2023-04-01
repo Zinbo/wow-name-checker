@@ -1,0 +1,6 @@
+env: local
+images:
+  backend: wow-name-checker-backend:local
+  frontend: wow-name-checker-frontend:local
+  redis: wow-name-checker-redis:local
+  mysql: wow-name-checker-mysql:local

@@ -1,0 +1,125 @@
+name: Deploy to ECS
+
+on:
+ 
+  push:
+    branches: [main]
+
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read  # This is required for actions/checkout
+
+jobs:
+
+  terraform:
+    name: "Set up infra with terraform"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: terraform
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        role-to-assume: arn:aws:iam::127868157889:role/github-actions-role
+        aws-region: eu-west-2
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+
+    - name: Terraform init
+      id: init
+      run: terraform init
+
+    - name: Terraform validate
+      id: validate
+      run: terraform validate
+
+    - name: Terraform Apply
+      run: terraform apply -auto-approve -input=false -var="mysql_password=${{ secrets.MYSQL_PASSWORD }}" -var="wow_client_id=${{ secrets.WOW_CLIENT_ID }}" -var="wow_client_secret=${{ secrets.WOW_CLIENT_SECRET }}"
+  
+  deploy:
+    name: Build images and deploy to ECS
+    runs-on: ubuntu-latest
+    needs: terraform
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+    
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        role-to-assume: arn:aws:iam::127868157889:role/github-actions-role
+        aws-region: eu-west-2
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Build, tag, and push frontend image to Amazon ECR
+      id: build-frontend
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: wow-name-checker-frontend_terraform
+        IMAGE_TAG: latest
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./wow-name-checker-frontend
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> "$GITHUB_OUTPUT"
+
+    - name: Build, tag, and push backend image to Amazon ECR
+      id: build-backend
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: wow-name-checker-backend_terraform
+        IMAGE_TAG: latest
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./wow-name-checker-backend
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+    - name: Download front end task definition
+      run: |
+        aws ecs describe-task-definition --task-definition wow-name-checker-frontend_terraform --query taskDefinition > frontend-task-definition.json
+
+    - name: Download back end task definition
+      run: |
+        aws ecs describe-task-definition --task-definition wow-name-checker-backend_terraform --query taskDefinition > backend-task-definition.json
+
+    - name: Fill in new image ID in front end task definition
+      id: frontend-task-def
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: frontend-task-definition.json
+        container-name: frontend-container
+        image: ${{ steps.build-frontend.outputs.image }}
+
+    - name: Deploy Frontend Amazon ECS task definition
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.frontend-task-def.outputs.task-definition }}
+        service: wow-name-checker-frontend_terraform
+        cluster: wow-name-checker-cluster_terraform
+        # wait-for-service-stability: true # I commented this out to reduce usage of free run minutes with GitHub Actions
+
+    - name: Generate Backend Amazon ECS Task Definition
+      id: backend-task-def
+      uses: aws-actions/amazon-ecs-render-task-definition@v1
+      with:
+        task-definition: backend-task-definition.json
+        container-name: backend-container
+        image: ${{ steps.build-backend.outputs.image }}
+
+    - name: Deploy Backend Amazon ECS task definition
+      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+      with:
+        task-definition: ${{ steps.backend-task-def.outputs.task-definition }}
+        service: wow-name-checker-backend_terraform
+        cluster: wow-name-checker-cluster_terraform
+        # wait-for-service-stability: true # I commented this out to reduce usage of free run minutes with GitHub Actions

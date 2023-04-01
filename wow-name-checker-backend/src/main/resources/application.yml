@@ -1,0 +1,65 @@
+spring:
+  application:
+    name: wow-name-checker
+  security:
+    oauth2:
+      client:
+        registration:
+          wow:
+            clientId: ${WOW_CLIENT_ID}
+            clientSecret: ${WOW_CLIENT_SECRET}
+            authorization-grant-type: client_credentials
+        provider:
+          wow:
+            authorization-uri: https://oauth.battle.net/authorize
+            token-uri: https://oauth.battle.net/token
+  cache:
+    type: redis
+  data:
+    redis:
+      host: ${REDIS_URL:localhost}
+      port: 6379
+  jpa:
+    show-sql: true
+  datasource:
+    url: ${MYSQL_URL:jdbc:mysql://localhost:3306/wow_name_checker}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${MYSQL_USERNAME:admin}
+    password: ${MYSQL_PASSWORD:password}
+  mail:
+    host: sandbox.smtp.mailtrap.io
+    port: 2525
+    username: 2bda0b88577839
+    password: fbda7a57572e1a
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+management:
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+  level:
+    org:
+      springframework:
+        web:
+          filter:
+            org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
+            CommonsRequestLoggingFilter: DEBUG
+
+clients:
+  wow:
+    url: https://%s.api.blizzard.com
+
+
+toggles:
+  alerts:
+    ignore-checks: ${FEATURE_TOGGLE_ALERTS_IGNORE_CHECKS:false}
