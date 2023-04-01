@@ -1,0 +1,58 @@
+version: "3.9"
+services:
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+  mysql:
+    image: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_USER: admin
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: wow_name_checker
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: password
+  backend-svc:
+    build:
+      context: ../wow-name-checker-backend/
+      target: development
+      dockerfile: Dockerfile
+    volumes:
+      - ../wow-name-checker-backend/:/app
+      - ${USERPROFILE}/.m2:/root/.m2
+    ports:
+      - "8080:8080"
+      - "35729:35729"
+      - "5005:5005"
+    environment:
+      MYSQL_URL: jdbc:mysql://mysql:3306/wow_name_checker
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: password
+      REDIS_URL: redis
+      WOW_CLIENT_SECRET: ${WOW_CLIENT_SECRET}
+      WOW_CLIENT_ID: ${WOW_CLIENT_ID}
+      FEATURE_TOGGLE_ALERTS_IGNORE_CHECKS: true
+    depends_on:
+      mysql:
+        condition: service_started
+      redis:
+        condition: service_started
+  next:
+    build:
+      context: ../wow-name-checker-frontend/
+      target: development
+      dockerfile: Dockerfile
+    volumes:
+      - ../wow-name-checker-frontend/:/app
+    ports:
+      - "3000:3000"
+    environment:
+      WATCHPACK_POLLING: true
+    depends_on:
+      backend-svc:
+        condition: service_started
+
+
+

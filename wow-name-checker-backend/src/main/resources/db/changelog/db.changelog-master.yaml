@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: createSubscriptionTable2
+      author: Shane Jennings
+      changes:
+        - sqlFile:
+            path: scripts/create-subscription-table.sql
+            relativeToChangelogFile: true
+            splitStatements: true
+            stripComments: true

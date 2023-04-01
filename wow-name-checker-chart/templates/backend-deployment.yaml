@@ -1,0 +1,65 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: backend-svc
+spec:
+  selector:
+    app: backend
+  ports:
+    - protocol: "TCP"
+      port: 80
+      targetPort: 8080
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  labels:
+    app: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      name: backend
+      labels:
+        app: backend
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/actuator/prometheus"
+        prometheus.io/port: "8080"
+    spec:
+      containers:
+        - name: backend
+          image: {{ .Values.images.backend }}
+          {{ if eq .Values.env "local" }}imagePullPolicy: Never{{ end }}
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 60
+            periodSeconds: 5
+          env:
+            - name: REDIS_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: redis.url
+                  name: backend-configmap
+            - name: MYSQL_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: mysql.url
+                  name: backend-configmap
+            - name: WOW_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  key: wow.clientId
+                  name: backend-secrets
+            - name: WOW_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: wow.clientSecret
+                  name: backend-secrets

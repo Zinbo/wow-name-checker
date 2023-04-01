@@ -3,6 +3,9 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+*.ppk
+*.terraform*
+*.exe
 
 ### STS ###
 .apt_generated
@@ -14,7 +17,9 @@ target/
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
+.idea/workspace.xml
+.idea/usage.statistics.xml
+.idea/shelf
 *.iws
 *.iml
 *.ipr

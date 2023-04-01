@@ -1,0 +1,7 @@
+env: dev
+images:
+  backend: 127868157889.dkr.ecr.eu-west-2.amazonaws.com/wow-name-checker-backend
+  frontend: 127868157889.dkr.ecr.eu-west-2.amazonaws.com/wow-name-checker-frontend
+wow:
+  clientId: clientId
+  clientSecret: clientSecret

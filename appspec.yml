@@ -1,0 +1,10 @@
+version: 0.0
+os: linux
+files:
+  - source: /k8s
+    destination: /usr/local/codedeployresources
+hooks:
+  ApplicationStart:
+    - location: aws/scripts/application-start.sh
+      timeout: 300
+      runas: root
