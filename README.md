@@ -1,5 +1,5 @@
 [![workflow badge](https://github.com/zinbo/wow-name-checker/actions/workflows/main.yml/badge.svg)](https://github.com/zinbo/wow-name-checker/actions)
-[![Known Vulnerabilities](https://snyk.io/test/github/zinbo/wow-name-checker/badge.svg)]
+[![Known Vulnerabilities](https://snyk.io/test/github/zinbo/wow-name-checker/badge.svg)](https://snyk.io/test/github/zinbo/wow-name-checker/badge.svg)
 
 
 [![HitCount](https://hits.dwyl.com/zinbo/wow-name-checker.svg)](https://hits.dwyl.com/zinbo/wow-name-checker)
