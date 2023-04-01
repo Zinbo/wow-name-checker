@@ -241,7 +241,7 @@ resource "aws_db_instance" "wow-name-checker-db_terraform" {
   identifier             = "wow-name-checker-terraform"
   allocated_storage      = 5
   maintenance_window     = "sun:03:00-sun:03:30"
-  multi_az               = true
+  multi_az               = false
   engine                 = "mysql"
   engine_version         = "8.0.28"
   instance_class         = "db.t2.micro"
