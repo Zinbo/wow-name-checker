@@ -1,8 +1,8 @@
-[![workflow badge](https://github.com/wildmrbones/wow-name-checker/actions/workflows/main.yml/badge.svg)](https://github.com/wildmrbones/wow-name-checker/actions)
-[![Known Vulnerabilities](https://snyk.io/test/github/wildmrbones/wow-name-checker/badge.svg)]
+[![workflow badge](https://github.com/zinbo/wow-name-checker/actions/workflows/main.yml/badge.svg)](https://github.com/zinbo/wow-name-checker/actions)
+[![Known Vulnerabilities](https://snyk.io/test/github/zinbo/wow-name-checker/badge.svg)]
 
 
-[![HitCount](https://hits.dwyl.com/wildmrbones/wow-name-checker.svg)](https://hits.dwyl.com/wildmrbones/wow-name-checker)
+[![HitCount](https://hits.dwyl.com/zinbo/wow-name-checker.svg)](https://hits.dwyl.com/zinbo/wow-name-checker)
 
 ## Why? [![start with why](https://img.shields.io/badge/start%20with-why%3F-brightgreen.svg?style=flat)](https://www.ted.com/talks/simon_sinek_how_great_leaders_inspire_action)
 People tend to create placeholder characters on World of Warcraft to hold names that they want to use in the future.  
