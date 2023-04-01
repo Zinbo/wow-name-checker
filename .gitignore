@@ -5,6 +5,7 @@ target/
 !**/src/test/**/target/
 *.ppk
 *.terraform*
+terraform.tfstate*
 *.exe
 
 ### STS ###
