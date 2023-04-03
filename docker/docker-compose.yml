@@ -34,6 +34,8 @@ services:
       WOW_CLIENT_SECRET: ${WOW_CLIENT_SECRET}
       WOW_CLIENT_ID: ${WOW_CLIENT_ID}
       FEATURE_TOGGLE_ALERTS_IGNORE_CHECKS: true
+      MAILTRAP_USERNAME: ${MAILTRAP_USERNAME}
+      MAILTRAP_PASSWORD: ${MAILTRAP_PASSWORD}
     depends_on:
       mysql:
         condition: service_started
