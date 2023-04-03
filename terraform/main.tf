@@ -360,6 +360,14 @@ resource "aws_ecs_task_definition" "backend-task_definition_terraform" {
         {
           name : "REDIS_URL",
           value : aws_elasticache_cluster.wow-name-checker-cache-terraform.cache_nodes[0].address
+        },
+        {
+          name: "MAILTRAP_USERNAME",
+          value: var.mailtrap_username
+        },
+        {
+          name: "MAILTRAP_PASSWORD",
+          value: var.mailtrap_password
         }
       ],
       mountPoints : [],

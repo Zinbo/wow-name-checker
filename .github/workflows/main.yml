@@ -41,7 +41,7 @@ jobs:
       run: terraform validate
 
     - name: Terraform Apply
-      run: terraform apply -auto-approve -input=false -var="mysql_password=${{ secrets.MYSQL_PASSWORD }}" -var="wow_client_id=${{ secrets.WOW_CLIENT_ID }}" -var="wow_client_secret=${{ secrets.WOW_CLIENT_SECRET }}"
+      run: terraform apply -auto-approve -input=false -var="mysql_password=${{ secrets.MYSQL_PASSWORD }}" -var="wow_client_id=${{ secrets.WOW_CLIENT_ID }}" -var="wow_client_secret=${{ secrets.WOW_CLIENT_SECRET }}" -var="mailtrap_username=${{ secrets.MAILTRAP_USERNAME }}" -var="mailtrap_password=${{ secrets.MAILTRAP_PASSWORD }}"
   
   deploy:
     name: Build images and deploy to ECS
