@@ -10,6 +10,14 @@ variable "wow_client_secret" {
   type = string
 }
 
+variable "mailtrap_username" {
+  type = string
+}
+
+variable "mailtrap_password" {
+  type = string
+}
+
 terraform {
   required_providers {
     aws = {
@@ -279,10 +287,12 @@ resource "aws_elasticache_cluster" "wow-name-checker-cache-terraform" {
 # ECS
 resource "aws_ecr_repository" "wow-name-checker-backend_terraform" {
   name = "wow-name-checker-backend_terraform"
+  force_delete = true
 }
 
 resource "aws_ecr_repository" "wow-name-checker-frontend_terraform" {
   name = "wow-name-checker-frontend_terraform"
+  force_delete = true
 }
 
 resource "aws_ecs_cluster" "wow-name-checker-cluster_terraform" {
