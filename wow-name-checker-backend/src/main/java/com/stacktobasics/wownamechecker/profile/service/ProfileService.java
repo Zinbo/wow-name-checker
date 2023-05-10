@@ -1,7 +1,8 @@
-package com.stacktobasics.wownamechecker.profile.api.profile;
+package com.stacktobasics.wownamechecker.profile.service;
 
 import com.stacktobasics.wownamechecker.infra.clients.ProfileDTO;
 import com.stacktobasics.wownamechecker.infra.clients.WoWClient;
+import com.stacktobasics.wownamechecker.profile.api.Regions;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,7 +36,7 @@ public class ProfileService {
         var formattedName = name.toLowerCase();
         log.info("Getting profile for name: {}, realm: {}, region: {}...", formattedName, formattedRealm, regionId);
         try {
-            return Optional.of(woWClient.getProfile(URI.create(String.format(baseURLFormat, regionId)), formattedName, formattedRealm, "profile-" + regionId));
+            return Optional.ofNullable(woWClient.getProfile(URI.create(String.format(baseURLFormat, regionId)), formattedName, formattedRealm, "profile-" + regionId));
         } catch (FeignException feignException) {
             if(feignException.status() == 404) return Optional.empty();
             throw feignException;

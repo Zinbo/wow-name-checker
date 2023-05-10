@@ -1,8 +1,8 @@
-package com.stacktobasics.wownamechecker.alert.api;
+package com.stacktobasics.wownamechecker.alert.service;
 
 import com.stacktobasics.wownamechecker.alert.domain.Subscription;
 import com.stacktobasics.wownamechecker.alert.domain.SubscriptionRepository;
-import com.stacktobasics.wownamechecker.profile.api.profile.ProfileService;
+import com.stacktobasics.wownamechecker.profile.service.ProfileService;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

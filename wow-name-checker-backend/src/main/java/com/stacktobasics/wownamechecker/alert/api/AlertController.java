@@ -1,6 +1,7 @@
 package com.stacktobasics.wownamechecker.alert.api;
 
 import com.stacktobasics.wownamechecker.alert.infra.AlertScheduler;
+import com.stacktobasics.wownamechecker.alert.service.AlertService;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.web.bind.annotation.*;
 
