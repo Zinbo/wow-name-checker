@@ -3,7 +3,7 @@ package com.stacktobasics.wownamechecker.alert.infra;
 import com.stacktobasics.wownamechecker.alert.domain.RealmAndRegion;
 import com.stacktobasics.wownamechecker.alert.domain.Subscription;
 import com.stacktobasics.wownamechecker.alert.domain.SubscriptionRepository;
-import com.stacktobasics.wownamechecker.profile.api.profile.ProfileService;
+import com.stacktobasics.wownamechecker.profile.service.ProfileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
