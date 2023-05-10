@@ -23,9 +23,26 @@ public class EmailSender {
         Map<String, List<Subscription>> emailToSubs = subsToNotify.stream().collect(Collectors.groupingBy(Subscription::getEmail));
         return emailToSubs.keySet().stream().map(email -> {
 
+            String emailStart = """
+                    <!doctype html>
+                    <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+                        <head>
+                            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+                            <meta name="viewport" content="width=device-width" />
+                        </head>
+                        <body>
+                            <h1>Hello from WoW Name Checker!</h1>
+                           
+                            The following names are now available:</br>
+                    """;
+
+            var emailEnd = """
+                        
+                        </body>
+                    </html>
+                    """;
+
             StringBuilder sb = new StringBuilder();
-            sb.append("Hello from WoW Name Checker!<br/>");
-            sb.append("The following names are now available:<br/>");
             List<Subscription> subs = emailToSubs.get(email);
             subs.forEach(sub -> {
                 sb.append("Name: ").append(sub.getName()).append("<br/>");
@@ -39,7 +56,7 @@ public class EmailSender {
             message.setFrom("hello@wownamechecker.com");
             message.setTo(email);
             message.setSubject("Your subscribed names are now available in World of Warcraft!");
-            message.setText(sb.toString());
+            message.setText(emailStart + sb + emailEnd);
             return Result.of(() -> {
                 try {
                     emailSender.send(message);
