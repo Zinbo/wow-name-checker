@@ -1,6 +1,7 @@
 package com.stacktobasics.wownamechecker.infra.exceptionhandler;
 
 import feign.FeignException;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -44,6 +45,11 @@ public class HttpExceptionHandler {
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<ExceptionResponse> missingParamException(MissingServletRequestParameterException exception) {
+        return buildResponseEntity(HttpStatus.BAD_REQUEST, exception);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ExceptionResponse> constraintViolationException(ConstraintViolationException exception) {
         return buildResponseEntity(HttpStatus.BAD_REQUEST, exception);
     }
 
