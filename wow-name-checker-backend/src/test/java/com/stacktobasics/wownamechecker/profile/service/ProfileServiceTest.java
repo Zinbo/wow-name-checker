@@ -4,7 +4,6 @@ import com.stacktobasics.wownamechecker.infra.clients.ProfileDTO;
 import com.stacktobasics.wownamechecker.infra.clients.WoWClient;
 import feign.FeignException;
 import feign.Request;
-import feign.RequestTemplate;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,22 +11,20 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 
 import java.net.URI;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static com.stacktobasics.wownamechecker.TestHelper.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class ProfileServiceTest {
 
-    public static final String NAME = "Zinbo";
     public static final String EXPECTED_NAME = NAME.toLowerCase();
-    public static final String REALM = "Argent-Dawn";
-    public static final String REGION = "eu";
+
     public static final String NAMESPACE = "profile-" + REGION;
     private static final String EXPECTED_REALM = "argentdawn";
     public static final String URL_FORMAT = "https://%s.api.blizzard.com";
@@ -53,7 +50,7 @@ class ProfileServiceTest {
         // arrange
         // act
         // assert
-        Assertions.assertThatThrownBy(() -> profileService.getCachedProfile(NAME, REALM, "invalid"))
+        Assertions.assertThatThrownBy(() -> profileService.getProfile(NAME, REALM, "invalid"))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("invalid is not a valid region");
     }
@@ -109,7 +106,7 @@ class ProfileServiceTest {
         when(client.getProfile(URL, EXPECTED_NAME, EXPECTED_REALM, NAMESPACE)).thenReturn(expected);
         
         // act
-        Optional<ProfileDTO> actual = profileService.getCachedProfile(NAME, REALM, REGION);
+        Optional<ProfileDTO> actual = profileService.getProfile(NAME, REALM, REGION);
 
         // assert
         Assertions.assertThat(actual).contains(expected);
@@ -125,7 +122,7 @@ class ProfileServiceTest {
 
         // act
         // assert
-        Assertions.assertThatThrownBy(() -> profileService.getCachedProfile(NAME, REALM, REGION))
+        Assertions.assertThatThrownBy(() -> profileService.getProfile(NAME, REALM, REGION))
                 .isEqualTo(expected);
     }
     
@@ -138,7 +135,7 @@ class ProfileServiceTest {
                 .thenThrow(expected);
 
         // act
-        var actual = profileService.getCachedProfile(NAME, REALM, REGION);
+        var actual = profileService.getProfile(NAME, REALM, REGION);
 
         // assert
         Assertions.assertThat(actual).isEmpty();
@@ -152,7 +149,7 @@ class ProfileServiceTest {
                 .thenReturn(null);
 
         // act
-        var actual = profileService.getCachedProfile(NAME, REALM, REGION);
+        var actual = profileService.getProfile(NAME, REALM, REGION);
 
         // assert
         Assertions.assertThat(actual).isEmpty();
