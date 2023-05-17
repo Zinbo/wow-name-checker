@@ -46,8 +46,8 @@ class ProfileControllerTest {
     public static Stream<Arguments> differentRegionsSource() {
         return Stream.of(
                 Arguments.of("", REALM, REGION, "name"),
-                Arguments.of(NAME, "", REGION, "realm"),
-                Arguments.of(NAME, REALM, "", "region")
+                Arguments.of(CHAR_NAME, "", REGION, "realm"),
+                Arguments.of(CHAR_NAME, REALM, "", "region")
         );
     }
 
@@ -68,10 +68,10 @@ class ProfileControllerTest {
     public void profileExistsTest() throws Exception {
         // arrange
         ProfileDTO expected = new ProfileDTO(1, 2);
-        when(profileService.getCachedProfile(NAME, REALM, REGION)).thenReturn(Optional.of(expected));
+        when(profileService.getCachedProfile(CHAR_NAME, REALM, REGION)).thenReturn(Optional.of(expected));
 
         // act
-        MvcResult mvcResult = mockMvc.perform(get("/profile").param("name", NAME).param("realm", REALM).param("region", REGION))
+        MvcResult mvcResult = mockMvc.perform(get("/profile").param("name", CHAR_NAME).param("realm", REALM).param("region", REGION))
                 .andExpect(status().isOk())
                 .andReturn();
         var actual = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), ProfileDTO.class);
@@ -84,14 +84,14 @@ class ProfileControllerTest {
     @DisplayName("/profile with profile that doesn't exist returns 404")
     public void profileDoesNotExistTest() throws Exception {
         // arrange
-        when(profileService.getCachedProfile(NAME, REALM, REGION)).thenReturn(Optional.empty());
+        when(profileService.getCachedProfile(CHAR_NAME, REALM, REGION)).thenReturn(Optional.empty());
 
         // act
         // assert
-        mockMvc.perform(get("/profile").param("name", NAME).param("realm", REALM).param("region", REGION))
+        mockMvc.perform(get("/profile").param("name", CHAR_NAME).param("realm", REALM).param("region", REGION))
                 .andExpect(status().isNotFound());
 
-        Mockito.verify(profileService).getCachedProfile(NAME, REALM, REGION);
+        Mockito.verify(profileService).getCachedProfile(CHAR_NAME, REALM, REGION);
     }
 
 }

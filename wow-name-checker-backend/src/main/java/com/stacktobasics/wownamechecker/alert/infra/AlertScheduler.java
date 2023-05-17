@@ -69,7 +69,7 @@ public class AlertScheduler {
             failedEmails.incrementAndGet();
         }));
 
-        log.info("Successfully sent {} emails. Failed to send {} emails", successfulEmails, failedEmails);
+        log.info("Successfully sent {} emails. Failed to send {} emails.", successfulEmails, failedEmails);
         subscriptionRepository.deleteAllById(idsToRemove);
         log.info("Deleted {} subs: {}", idsToRemove.size(), idsToRemove);
     }

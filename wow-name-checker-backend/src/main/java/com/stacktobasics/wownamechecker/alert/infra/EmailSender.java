@@ -45,10 +45,10 @@ public class EmailSender {
             StringBuilder sb = new StringBuilder();
             List<Subscription> subs = emailToSubs.get(email);
             subs.forEach(sub -> {
-                sb.append("Name: ").append(sub.getName()).append("<br/>");
-                sb.append("Realm: ").append(sub.getRealm()).append("<br/>");
-                sb.append("Region: ").append(sub.getRegion()).append("<br/>");
-                sb.append("<br/>");
+                sb.append("Name: ").append(sub.getName()).append("<br/>").append("\n");
+                sb.append("Realm: ").append(sub.getRealm()).append("<br/>").append("\n");
+                sb.append("Region: ").append(sub.getRegion()).append("<br/>").append("\n");
+                sb.append("<br/>").append("\n");
             });
             sb.append("Be sure to claim them quick!");
 

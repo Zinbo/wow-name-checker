@@ -3,8 +3,6 @@ package com.stacktobasics.wownamechecker.profile.api;
 
 import com.stacktobasics.wownamechecker.infra.clients.ProfileDTO;
 import com.stacktobasics.wownamechecker.profile.service.ProfileService;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

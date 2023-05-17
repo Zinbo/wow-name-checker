@@ -10,7 +10,7 @@ import java.net.URI;
 
 @FeignClient(
         name = "wow",
-        url = "https://eu.api.blizzard.com",
+        url = "unused",
         configuration = OAuthFeignConfig.class)
 public interface WoWClient {
 

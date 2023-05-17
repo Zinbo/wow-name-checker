@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface SubscriptionRepository extends JpaRepository<Subscription, UUID> {
-    boolean existsByEmailAndNameAndRegionAndRealm(@NotBlank String email, @NotBlank String name, @NotBlank String region, @NotBlank String realm);
+    boolean existsByEmailAndNameAndRealmAndRegion(@NotBlank String email, @NotBlank String name, @NotBlank String realm, @NotBlank String region);
 
     @Query("select distinct new com.stacktobasics.wownamechecker.alert.domain.RealmAndRegion(realm, region) from Subscription")
     List<RealmAndRegion> getDistinctRealmAndRegionPairs();

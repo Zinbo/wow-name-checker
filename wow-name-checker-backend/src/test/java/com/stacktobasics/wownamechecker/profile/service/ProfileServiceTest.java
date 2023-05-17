@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 
 class ProfileServiceTest {
 
-    public static final String EXPECTED_NAME = NAME.toLowerCase();
+    public static final String EXPECTED_NAME = CHAR_NAME.toLowerCase();
 
     public static final String NAMESPACE = "profile-" + REGION;
     private static final String EXPECTED_REALM = "argentdawn";
@@ -38,10 +38,10 @@ class ProfileServiceTest {
     public void getCachedProfileTest() {
         // arrange
         // act
-        profileService.getCachedProfile(NAME, REALM, REGION);
+        profileService.getCachedProfile(CHAR_NAME, REALM, REGION);
 
         // assert
-        Mockito.verify(profileService).getProfile(NAME, REALM, REGION);
+        Mockito.verify(profileService).getProfile(CHAR_NAME, REALM, REGION);
     }
 
     @Test
@@ -50,7 +50,7 @@ class ProfileServiceTest {
         // arrange
         // act
         // assert
-        Assertions.assertThatThrownBy(() -> profileService.getProfile(NAME, REALM, "invalid"))
+        Assertions.assertThatThrownBy(() -> profileService.getProfile(CHAR_NAME, REALM, "invalid"))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("invalid is not a valid region");
     }
@@ -70,7 +70,7 @@ class ProfileServiceTest {
     public void getProfileDifferentRegionsTest(String region, String expected) {
         // arrange
         // act
-        profileService.getCachedProfile(NAME, REALM, region);
+        profileService.getCachedProfile(CHAR_NAME, REALM, region);
 
         // assert
         Mockito.verify(client).getProfile(URI.create("https://" + expected + ".api.blizzard.com"), EXPECTED_NAME, EXPECTED_REALM, "profile-" + expected);
@@ -92,7 +92,7 @@ class ProfileServiceTest {
         // arrange
         
         // act
-        profileService.getCachedProfile(NAME, realm, REGION);
+        profileService.getCachedProfile(CHAR_NAME, realm, REGION);
         
         // assert
         Mockito.verify(client).getProfile(URL, EXPECTED_NAME, expected, NAMESPACE);
@@ -106,7 +106,7 @@ class ProfileServiceTest {
         when(client.getProfile(URL, EXPECTED_NAME, EXPECTED_REALM, NAMESPACE)).thenReturn(expected);
         
         // act
-        Optional<ProfileDTO> actual = profileService.getProfile(NAME, REALM, REGION);
+        Optional<ProfileDTO> actual = profileService.getProfile(CHAR_NAME, REALM, REGION);
 
         // assert
         Assertions.assertThat(actual).contains(expected);
@@ -122,7 +122,7 @@ class ProfileServiceTest {
 
         // act
         // assert
-        Assertions.assertThatThrownBy(() -> profileService.getProfile(NAME, REALM, REGION))
+        Assertions.assertThatThrownBy(() -> profileService.getProfile(CHAR_NAME, REALM, REGION))
                 .isEqualTo(expected);
     }
     
@@ -135,7 +135,7 @@ class ProfileServiceTest {
                 .thenThrow(expected);
 
         // act
-        var actual = profileService.getProfile(NAME, REALM, REGION);
+        var actual = profileService.getProfile(CHAR_NAME, REALM, REGION);
 
         // assert
         Assertions.assertThat(actual).isEmpty();
@@ -149,7 +149,7 @@ class ProfileServiceTest {
                 .thenReturn(null);
 
         // act
-        var actual = profileService.getProfile(NAME, REALM, REGION);
+        var actual = profileService.getProfile(CHAR_NAME, REALM, REGION);
 
         // assert
         Assertions.assertThat(actual).isEmpty();

@@ -2,6 +2,7 @@ package com.stacktobasics.wownamechecker.alert.api;
 
 import com.stacktobasics.wownamechecker.alert.infra.AlertScheduler;
 import com.stacktobasics.wownamechecker.alert.service.AlertService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,7 @@ public class AlertController {
     }
 
     @PostMapping
-    public void addAlert(@NotNull @RequestBody AlertDTO alertDTO) {
+    public void addAlert(@Valid @NotNull @RequestBody AlertDTO alertDTO) {
         alertService.addAlert(alertDTO.email(), alertDTO.character(), alertDTO.realm(), alertDTO.region());
     }
 
