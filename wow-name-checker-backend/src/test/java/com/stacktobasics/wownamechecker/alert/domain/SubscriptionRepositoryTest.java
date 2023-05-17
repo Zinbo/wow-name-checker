@@ -18,11 +18,11 @@ class SubscriptionRepositoryTest {
     @DisplayName("existsByEmailAndNameAndRegionAndRealm with existing data returns true")
     public void existsByEmailAndNameAndRegionAndRealmValidDataTest() {
         // arrange
-        Subscription subscription = new Subscription("hello@email.com", "Zinbaan", "eu", "Argent-Dawn");
+        Subscription subscription = new Subscription("hello@email.com", "Zinbaan", "Argent-Dawn", "eu");
         subscriptionRepository.save(subscription);
 
         // act
-        boolean actual = subscriptionRepository.existsByEmailAndNameAndRegionAndRealm("hello@email.com", "Zinbaan", "eu", "Argent-Dawn");
+        boolean actual = subscriptionRepository.existsByEmailAndNameAndRealmAndRegion("hello@email.com", "Zinbaan", "Argent-Dawn", "eu");
 
         // assert
         Assertions.assertThat(actual).isTrue();
@@ -32,11 +32,11 @@ class SubscriptionRepositoryTest {
     @DisplayName("existsByEmailAndNameAndRegionAndRealm without matching data returns false")
     public void existsByEmailAndNameAndRegionAndRealmNoDataTest() {
         // arrange
-        Subscription subscription = new Subscription("hello@email.com", "Zinbaan", "eu", "Argent-Dawn");
+        Subscription subscription = new Subscription("hello@email.com", "Zinbaan", "Argent-Dawn", "eu");
         subscriptionRepository.save(subscription);
 
         // act
-        boolean actual = subscriptionRepository.existsByEmailAndNameAndRegionAndRealm("different@email.com", "Zinbaan", "eu", "Argent-Dawn");
+        boolean actual = subscriptionRepository.existsByEmailAndNameAndRealmAndRegion("different@email.com", "Zinbaan", "Argent-Dawn", "eu");
 
         // assert
         Assertions.assertThat(actual).isFalse();
@@ -46,11 +46,11 @@ class SubscriptionRepositoryTest {
     @DisplayName("getDistinctRealmAndRegionPairs with multiple realms and regions gets a single copy of each pair")
     public void getDistinctRealmAndRegionPairsTest() {
         // arrange
-        subscriptionRepository.saveAll(List.of(new Subscription("hello@email.com", "Zinbaan", "eu", "Argent-Dawn"),
-                new Subscription("hello2@email.com", "Zinbo", "eu", "Argent-Dawn"),
-                new Subscription("hello3@email.com", "OtherName", "eu", "Aman'Thul"),
-                new Subscription("hello4@email.com", "OtherName2", "us", "Aman'Thul"),
-                new Subscription("hello4@email.com", "OtherName3", "us", "Khadgar")));
+        subscriptionRepository.saveAll(List.of(new Subscription("hello@email.com", "Zinbaan", "Argent-Dawn", "eu"),
+                new Subscription("hello2@email.com", "Zinbo", "Argent-Dawn", "eu"),
+                new Subscription("hello3@email.com", "OtherName", "Aman'Thul", "eu"),
+                new Subscription("hello4@email.com", "OtherName2", "Aman'Thul", "us"),
+                new Subscription("hello4@email.com", "OtherName3", "Khadgar", "us")));
 
         var expected = List.of(new RealmAndRegion( "Argent-Dawn", "eu"),
                 new RealmAndRegion("Aman'Thul", "eu"),
@@ -69,10 +69,10 @@ class SubscriptionRepositoryTest {
     @DisplayName("findByRealmAndRegion with multiple subscriptions returns subs with that realm and region")
     public void findByRealmAndRegionTest() {
         // arrange
-        List<Subscription> expected = List.of(new Subscription("hello@email.com", "Zinbaan", "eu", "Argent-Dawn"),
-                new Subscription("hello2@email.com", "Zinbo", "eu", "Argent-Dawn"));
+        List<Subscription> expected = List.of(new Subscription("hello@email.com", "Zinbaan", "Argent-Dawn", "eu"),
+                new Subscription("hello2@email.com", "Zinbo", "Argent-Dawn", "eu"));
         subscriptionRepository.saveAll(expected);
-        subscriptionRepository.save(new Subscription("hello3@email.com", "OtherName", "eu", "Aman'Thul"));
+        subscriptionRepository.save(new Subscription("hello3@email.com", "OtherName", "Aman'Thul", "eu"));
 
         // act
         List<Subscription> actual = subscriptionRepository.findByRealmAndRegion("Argent-Dawn", "eu");

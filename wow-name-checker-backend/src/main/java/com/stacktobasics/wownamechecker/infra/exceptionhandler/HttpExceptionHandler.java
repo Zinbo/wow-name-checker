@@ -38,7 +38,7 @@ public class HttpExceptionHandler {
         for(var e: results.getFieldErrors()) {
             sb.append(String.format("Field: \"%s\", Message: \"%s\"\n", e.getField(), e.getDefaultMessage()));
         }
-        String message = String.format("%s failed validation with %s errors.\n Errors [\n%s]", exception.getParameter(),
+        String message = String.format("%s failed validation with %s errors.\nErrors: [\n%s]", exception.getParameter(),
                 exception.getErrorCount(), sb);
         return buildResponseEntity(HttpStatus.BAD_REQUEST, new IllegalArgumentException(message));
     }

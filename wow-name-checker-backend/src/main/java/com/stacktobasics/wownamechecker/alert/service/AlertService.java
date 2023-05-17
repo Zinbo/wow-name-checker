@@ -21,7 +21,7 @@ public class AlertService {
 
 
     public void addAlert(@NonNull String email, @NonNull String character, @NonNull String realm, @NonNull String region) {
-        if(subscriptionRepository.existsByEmailAndNameAndRegionAndRealm(email, character, realm, region)) {
+        if(subscriptionRepository.existsByEmailAndNameAndRealmAndRegion(email, character, realm, region)) {
             log.info("Subscription for email: {}, name: {}, realm: {}, region: {} already exists.", email, character, realm, region);
             return;
         }
@@ -30,7 +30,7 @@ public class AlertService {
             return;
         }
 
-        Subscription subscription = new Subscription(email, character, region, realm);
+        Subscription subscription = new Subscription(email, character, realm, region);
         subscriptionRepository.save(subscription);
     }
 }

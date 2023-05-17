@@ -23,7 +23,7 @@ public class Subscription {
     private String region;
     private String realm;
 
-    public Subscription(String email, String name, String region, String realm) {
+    public Subscription(@NonNull String email, @NonNull String name, @NonNull String realm, @NonNull String region) {
         this.id = UUID.randomUUID();
         this.email = email;
         this.name = name;
