@@ -23,7 +23,7 @@ public class AlertController {
         alertService.addAlert(alertDTO.email(), alertDTO.character(), alertDTO.realm(), alertDTO.region());
     }
 
-    @GetMapping("/trigger-scheduler")
+    @PostMapping("/trigger-scheduler")
     public void scheduler() {
         alertScheduler.checkProfiles();
     }

@@ -33,8 +33,9 @@ public class AlertScheduler {
         this.ignoreChecks = ignoreChecks;
     }
 
-    @Scheduled(cron = "* 0 * * * *")
+    @Scheduled(cron = "${alerts.schedule}")
     public void checkProfiles() {
+        log.info("=== Starting Email Subscribers Job ===");
         log.info("Checking if subscribed profiles still exist...");
         List<RealmAndRegion> realmAndRegionPairs = subscriptionRepository.getDistinctRealmAndRegionPairs();
 

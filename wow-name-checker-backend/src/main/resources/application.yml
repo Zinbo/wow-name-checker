@@ -63,3 +63,6 @@ clients:
 toggles:
   alerts:
     ignore-checks: ${FEATURE_TOGGLE_ALERTS_IGNORE_CHECKS:false}
+
+alerts:
+  schedule: ${ALERT_SCHEDULE:* 0 * * * *}

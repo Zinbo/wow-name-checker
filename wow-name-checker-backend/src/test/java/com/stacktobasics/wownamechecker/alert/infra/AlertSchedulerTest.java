@@ -1,5 +1,9 @@
 package com.stacktobasics.wownamechecker.alert.infra;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
+import com.stacktobasics.wownamechecker.MemoryAppender;
 import com.stacktobasics.wownamechecker.alert.domain.RealmAndRegion;
 import com.stacktobasics.wownamechecker.alert.domain.Subscription;
 import com.stacktobasics.wownamechecker.alert.domain.SubscriptionRepository;
@@ -8,18 +12,28 @@ import com.stacktobasics.wownamechecker.profile.service.ProfileService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 import static com.stacktobasics.wownamechecker.TestHelper.*;
+import static org.awaitility.Awaitility.await;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -276,4 +290,38 @@ public class AlertSchedulerTest {
         var actualSubs = subsCaptor.getValue();
         Assertions.assertThat(actualSubs).usingRecursiveFieldByFieldElementComparator().containsExactlyInAnyOrderElementsOf(expectedSubs);
     }
+
+    @Nested
+    @DisplayName("Int Tests for AlertScheduler")
+    @SpringBootTest
+    @ActiveProfiles("test")
+    class AlertSchedulerIntTest {
+
+        private MemoryAppender memoryAppender;
+
+        @BeforeEach
+        public void setup() {
+            Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+            memoryAppender = new MemoryAppender();
+            memoryAppender.setContext((LoggerContext) LoggerFactory.getILoggerFactory());
+            logger.setLevel(Level.DEBUG);
+            logger.addAppender(memoryAppender);
+            memoryAppender.start();
+        }
+
+
+        @Test
+        @DisplayName("start app when waiting for 10 seconds scheduler should be triggered")
+        public void schedulerTest() {
+            // arrange
+            // act
+            // assert
+            await().atMost(10, TimeUnit.MINUTES)
+                    .untilAsserted(() -> memoryAppender.eventsExistWithMessagesEqualTo(Level.INFO, "=== Starting Email Subscribers Job ==="));
+        }
+
+
+    }
+
+
 }

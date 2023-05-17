@@ -15,7 +15,7 @@ public class ExceptionResponse {
     private final LocalDateTime datetime;
     private final String error;
 
-    ExceptionResponse(@NonNull HttpStatus status, @NonNull Exception ex, String correlationId) {
+    public ExceptionResponse(@NonNull HttpStatus status, @NonNull Exception ex, String correlationId) {
         datetime = LocalDateTime.now();
         this.status = status;
         this.error = ex.getMessage();
