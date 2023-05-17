@@ -11,15 +11,54 @@ permissions:
 
 jobs:
 
-  terraform:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Build Front End Image
+      uses: docker/build-push-action@v4
+      with:
+        push: false
+        tags: front-end:latest
+        context: ./wow-name-checker-frontend
+        target: production
+
+    - name: Build Back End Image
+      uses: docker/build-push-action@v4
+      with:
+        push: false
+        tags: back-end:latest
+        context: ./wow-name-checker-backend
+        target: production
+
+  deploy-terraform:
     name: "Set up infra with terraform"
     runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/master'
     defaults:
       run:
         shell: bash
         working-directory: terraform
 
     steps:
+    - name: Deploy?
+      uses: trstringer/manual-approval@v1
+      with:
+        secret: ${{ github.TOKEN }}
+        approvers: zinbo
+        minimum-approvals: 1
+        issue-title: "Deploy to ECS?"
+        issue-body: "Please approve or deny"
+        exclude-workflow-initiator-as-approver: false
+        additional-approved-words: ''
+        additional-denied-words: ''
+
     - name: Check out code
       uses: actions/checkout@v2
 
@@ -43,10 +82,11 @@ jobs:
     - name: Terraform Apply
       run: terraform apply -auto-approve -input=false -var="mysql_password=${{ secrets.MYSQL_PASSWORD }}" -var="wow_client_id=${{ secrets.WOW_CLIENT_ID }}" -var="wow_client_secret=${{ secrets.WOW_CLIENT_SECRET }}" -var="mailtrap_username=${{ secrets.MAILTRAP_USERNAME }}" -var="mailtrap_password=${{ secrets.MAILTRAP_PASSWORD }}"
   
-  deploy:
+  deploy-app:
     name: Build images and deploy to ECS
     runs-on: ubuntu-latest
-    needs: terraform
+    needs: deploy-terraform
+    if: github.ref == 'refs/heads/master'
 
     steps:
     - name: Check out code
@@ -62,27 +102,27 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Build, tag, and push frontend image to Amazon ECR
+    - name: Re-tag and push frontend image to Amazon ECR
       id: build-frontend
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: wow-name-checker-frontend_terraform
         IMAGE_TAG: latest
       run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./wow-name-checker-frontend --target production
+        docker image tag front-end:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> "$GITHUB_OUTPUT"
 
-    - name: Build, tag, and push backend image to Amazon ECR
+    - name: Re-tag and push backend image to Amazon ECR
       id: build-backend
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: wow-name-checker-backend_terraform
         IMAGE_TAG: latest
       run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./wow-name-checker-backend --target production
+        docker image tag back-end:latest $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+        echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> "$GITHUB_OUTPUT"
 
     - name: Download front end task definition
       run: |
