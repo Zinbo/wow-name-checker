@@ -11,3 +11,6 @@ spring:
 management:
   tracing:
     enabled: false
+
+alerts:
+  schedule: "* */5 * * * *"
