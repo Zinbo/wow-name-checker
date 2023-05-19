@@ -13,6 +13,8 @@ CMD ["sh", "run.sh"]
 
 FROM base as build
 RUN ./mvnw package
+# Copy jacoco report to github workspace file
+COPY target/site/jacoco/jacoco.csv /github/workspace
 
 FROM bellsoft/liberica-openjdk-alpine:17.0.7-7 as production
 EXPOSE 8080

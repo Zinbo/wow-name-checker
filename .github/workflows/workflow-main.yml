@@ -37,6 +37,19 @@ jobs:
         context: ./wow-name-checker-backend
         target: production
 
+    - name: Generate JaCoCo Badge
+      id: jacoco
+      uses: cicirello/jacoco-badge-generator@v2
+      with:
+        generate-branches-badge: true
+        jacoco-csv-file: >
+          $GITHUB_WORKSPACE/jacoco.csv
+
+    - name: Log coverage percentage
+      run: |
+        echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
+        echo "branch coverage = ${{ steps.jacoco.outputs.branches }}"
+
   deploy-terraform:
     name: "Set up infra with terraform"
     runs-on: ubuntu-latest
