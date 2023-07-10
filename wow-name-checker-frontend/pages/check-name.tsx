@@ -1,6 +1,7 @@
 import {useRouter} from "next/router";
 import React, {useEffect, useState} from "react";
 import {Typography} from "@mui/material";
+import MainBox from "@/components/MainBox";
 
 export default function Results() {
     const router = useRouter();
@@ -43,10 +44,7 @@ export default function Results() {
         )
 
         return (
-            <>
-                <Typography variant="h1">{name} isn&apos;t available :(</Typography>
-                <Typography variant="h2">Last login: {lastLogin?.toLocaleString()}</Typography>
-            </>
+            <MainBox/>
         )
     }
 
