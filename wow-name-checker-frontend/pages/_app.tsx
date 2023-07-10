@@ -5,6 +5,10 @@ import {theme} from '@/utils/theme';
 import {CssBaseline} from "@mui/material";
 import { CacheProvider, EmotionCache } from '@emotion/react';
 import createEmotionCache from "@/utils/createEmotionCache";
+import Header from "@/components/Header";
+import {Container} from "@mui/system";
+import Home from "@/components/Home";
+import Footer from "@/components/Footer";
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -19,7 +23,13 @@ export default function MyApp(props: MyAppProps) {
         <CacheProvider value={emotionCache}>
             <ThemeProvider theme={theme}>
                 <CssBaseline/>
-                <Component {...pageProps} />
+                <div style={{minHeight: '100vh', display: "flex", flexDirection: "column"}}>
+                    <Header/>
+                    <Container sx={{display: "flex", flexDirection: "column", flex: 1}}>
+                        <Component {...pageProps} />
+                    </Container>
+                    <Footer/>
+                </div>
             </ThemeProvider>
         </CacheProvider>
     )

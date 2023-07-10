@@ -10,6 +10,10 @@ const nextConfig = {
         source: '/profile/:path*',
         destination: 'http://backend-svc:8080/profile/:path*',
       },
+      {
+        source: '/alert/:path*',
+        destination: 'http://backend-svc:8080/alert/:path*',
+      },
     ]
   },
   output: 'standalone',

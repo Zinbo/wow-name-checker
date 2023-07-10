@@ -1,23 +1,32 @@
-import { createTheme } from '@mui/material/styles';
+import {createTheme, ThemeOptions} from '@mui/material/styles';
+import {Epilogue} from "@next/font/google";
 
+const epilogue = Epilogue({
+    weight: ["300", "400"],
+    style: ["normal", "italic"],
+    subsets: ["latin"],
+});
 
 export const theme = createTheme({
-    typography: {
-        fontFamily: [
-            '"Segoe UI"',
-            'Roboto',
-            '"Helvetica Neue"',
-            'Arial',
-            'sans-serif',
-            '"Segoe UI Emoji"',
-        ].join(','),
-    },
     palette: {
+        mode: 'light',
         primary: {
-            main: '#1976d2', // A blue color for primary elements
+            main: 'rgba(60,42,41,0.8)',
         },
         secondary: {
-            main: '#f44336', // A red color for secondary elements
+            main: '#f8b700',
+        },
+        background: {
+            default: '#211510',
+            paper: '#504137',
+        },
+        divider: '#f8b700',
+        text: {
+            secondary: 'rgba(255,255,255,0.87)',
+            primary: '#f8b700',
         },
     },
-})
+    typography: {
+        fontFamily: epilogue.style.fontFamily
+    },
+});
