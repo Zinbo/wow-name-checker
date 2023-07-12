@@ -1,13 +1,12 @@
 import {useRouter} from "next/router";
 import React, {useEffect, useState} from "react";
 import {Typography} from "@mui/material";
-import MainBox from "@/components/NameTakenBox";
+import NotAvailableBox from "@/components/NotAvailableBox";
 
 export default function Results() {
     const router = useRouter();
     const {name, region, realm} = router.query;
     const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
-    const [lastLogin, setLastLogin] = useState<Date | null>(null);
     const [error, setError] = useState(null);
 
     const callAPI = async () => {
@@ -15,8 +14,6 @@ export default function Results() {
         if (res.status === 404) setIsAvailable(true);
         else if (res.ok) {
             setIsAvailable(false);
-            const data = await res.json();
-            setLastLogin(new Date(data.last_login_timestamp));
         } else {
             const data = await res.json();
             setError(data);
@@ -34,7 +31,8 @@ export default function Results() {
             {JSON.stringify(error)}
         </>);
 
-        if (isAvailable === null) return <></>;
+        const notReady = isAvailable === null || !name || !region || !realm || typeof name !== "string" || typeof region !== "string" ||typeof realm !== "string";
+        if (notReady) return <></>;
 
         if (isAvailable) return (
             <>
@@ -44,7 +42,7 @@ export default function Results() {
         )
 
         return (
-            <MainBox name={name} region={region} realm={realm}/>
+            <NotAvailableBox name={name} region={region} realm={realm}/>
         )
     }
 
