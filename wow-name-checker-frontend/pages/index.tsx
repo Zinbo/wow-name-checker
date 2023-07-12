@@ -1,7 +1,7 @@
 import React from "react";
 import getServers, {Server} from "@/lib/realms";
 import {useRouter} from "next/router";
-import WoWBox from "@/components/WoWBox";
+import BoxContainer from "@/components/BoxContainer";
 import {Autocomplete, Button, TextField, Typography} from "@mui/material";
 import lifecraftFont from "@/utils/lifecraftFont";
 import Box from "@mui/material/Box";
@@ -31,7 +31,7 @@ export default ({servers}: Props) => {
     };
 
     return (
-        <WoWBox>
+        <BoxContainer>
             <Typography variant="h1" sx={{alignSelf: 'center', textAlign: 'center'}}
                         className={lifecraftFont.className} gutterBottom>
                 WoW Name Checker
@@ -52,6 +52,6 @@ export default ({servers}: Props) => {
             </Box>
             <Button color='secondary' variant="contained" sx={{alignSelf: 'center'}}
                     onClick={handleSubmitClick}>Search</Button>
-        </WoWBox>
+        </BoxContainer>
     )
 }

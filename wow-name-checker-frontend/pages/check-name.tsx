@@ -1,7 +1,7 @@
 import {useRouter} from "next/router";
 import React, {useEffect, useState} from "react";
 import {Typography} from "@mui/material";
-import MainBox from "@/components/MainBox";
+import MainBox from "@/components/NameTakenBox";
 
 export default function Results() {
     const router = useRouter();
@@ -44,7 +44,7 @@ export default function Results() {
         )
 
         return (
-            <MainBox/>
+            <MainBox name={name} region={region} realm={realm}/>
         )
     }
 
