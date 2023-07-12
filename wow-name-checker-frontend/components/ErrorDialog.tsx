@@ -4,13 +4,13 @@ import React from "react";
 
 interface Props {
     hasError: boolean
-    setHasError: (hasError: boolean) => void
+    setHasError ?: (hasError: boolean) => void
     errorTitle: string
 }
 export default ({hasError, setHasError, errorTitle}: Props) => {
     return (<Dialog
         open={hasError}
-        onClose={() => setHasError(false)}
+        onClose={setHasError ? () => setHasError(false) : () => {}}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         PaperProps={{
@@ -25,7 +25,7 @@ export default ({hasError, setHasError, errorTitle}: Props) => {
             <Typography sx={{mr: 5, fontWeight: 'bold'}}>
                 {errorTitle}
             </Typography>
-            <IconButton
+            {setHasError && <IconButton
                 aria-label="close"
                 onClick={() => setHasError(false)}
                 sx={{
@@ -36,7 +36,7 @@ export default ({hasError, setHasError, errorTitle}: Props) => {
                 }}
             >
                 <CloseIcon/>
-            </IconButton>
+            </IconButton>}
         </DialogTitle>
         <DialogContent>
             <DialogContentText id="alert-dialog-description" color='black' sx={{mt: 2}}>

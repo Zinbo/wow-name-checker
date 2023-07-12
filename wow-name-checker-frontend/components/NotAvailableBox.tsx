@@ -8,7 +8,7 @@ interface Props {
 }
 export default ({name, realm, region}:Props) => {
 
-    return ( <SubscriptionContainer title="That name is taken!"
+    return ( <SubscriptionContainer title={`${name} is taken on ${realm} (${region}) 😔`}
                                     subTitle="Do you want to get an email when it becomes available?" actionName="Subscribe"
                                     url="/alert" dto={{character: name, realm, region}}/>);
 }

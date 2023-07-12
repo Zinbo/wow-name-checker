@@ -36,7 +36,7 @@ export default ({servers}: Props) => {
                         className={lifecraftFont.className} gutterBottom>
                 WoW Name Checker
             </Typography>
-            <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 2, ml: 2, mr: 2}}>
+            <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 3, ml: 2, mr: 2}}>
                 <TextField id="outlined-basic" label="Character Name" variant="outlined" sx={{mr: 2, flex: 1}}
                            color='secondary' value={name} onChange={e => setName(e.target.value)}/>
                 <Autocomplete

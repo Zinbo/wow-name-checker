@@ -1,7 +1,9 @@
 import {useRouter} from "next/router";
 import React, {useEffect, useState} from "react";
-import {Typography} from "@mui/material";
 import NotAvailableBox from "@/components/NotAvailableBox";
+import AvailableBox from "@/components/AvailableBox";
+import ErrorDialog from "@/components/ErrorDialog";
+import LoadingScreen from "@/components/LoadingScreen";
 
 export default function Results() {
     const router = useRouter();
@@ -26,24 +28,12 @@ export default function Results() {
     }, [router.isReady]);
 
     const Result = () => {
-        if (!!error) return (<>
-            Error! <br/>
-            {JSON.stringify(error)}
-        </>);
+        if (!!error || !name || !region || !realm || typeof name !== "string" || typeof region !== "string" ||typeof realm !== "string") return <ErrorDialog errorTitle="Could not load WoW Character" hasError={true} />
 
-        const notReady = isAvailable === null || !name || !region || !realm || typeof name !== "string" || typeof region !== "string" ||typeof realm !== "string";
-        if (notReady) return <></>;
-
-        if (isAvailable) return (
-            <>
-                <Typography variant="h1">{name} is available!</Typography>
-                <Typography variant="h2">On realm {realm} and region {region}</Typography>
-            </>
-        )
-
-        return (
-            <NotAvailableBox name={name} region={region} realm={realm}/>
-        )
+        const isLoading = isAvailable === null;
+        if (isLoading) return <LoadingScreen isLoading={isLoading}/>;
+        if (isAvailable) return <AvailableBox name={name} region={region} realm={realm}/>
+        return <NotAvailableBox name={name} region={region} realm={realm}/>
     }
 
     return <Result/>;

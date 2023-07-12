@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import React from "react";
 import {Button, TextField, Typography} from "@mui/material";
-import WoWBox from "@/components/BoxContainer";
+import BoxContainer from "@/components/BoxContainer";
 import * as yup from "yup";
 import {useFormik} from "formik";
 import ErrorDialog from "@/components/ErrorDialog";
@@ -55,7 +55,7 @@ export default ({title, subTitle, actionName, dto, url}: Props) => {
     });
 
     return (
-        <WoWBox>
+        <BoxContainer>
             <LoadingScreen isLoading={isLoading}/>
             <Typography variant="h1" gutterBottom color='text.secondary'
                         sx={{fontWeight: 'bold', fontSize: '40px', alignSelf: 'center', textAlign: 'center'}}>
@@ -93,5 +93,5 @@ export default ({title, subTitle, actionName, dto, url}: Props) => {
                     </form>)}
                 {hasError && <ErrorDialog hasError={hasError} setHasError={setHasError} errorTitle={`Could not ${actionName.toLowerCase()} email`}/>}
             </Box>
-        </WoWBox>);
+        </BoxContainer>);
 }

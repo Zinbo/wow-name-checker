@@ -22,8 +22,10 @@ export default ({children}: Props) => {
                 alignSelf: 'center',
                 position: 'relative',
                 border: '2px solid #F8B700',
-                flexBasis: '90%',
-                p: 15
+                flex: 1,
+                // flexBasis: '90%',
+                py: 10,
+                px: 5
             }}
             bgcolor='background.paper'
         >
