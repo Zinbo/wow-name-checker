@@ -1,5 +1,6 @@
 package com.stacktobasics.wownamechecker.profile.api;
 
+import com.stacktobasics.wownamechecker.profile.domain.Regions;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -10,6 +10,7 @@ import com.stacktobasics.wownamechecker.infra.config.SecurityConfig;
 import com.stacktobasics.wownamechecker.infra.exceptionhandler.CorrelationIDHandler;
 import com.stacktobasics.wownamechecker.infra.exceptionhandler.ExceptionResponse;
 import com.stacktobasics.wownamechecker.profile.api.ProfileController;
+import com.stacktobasics.wownamechecker.profile.domain.Character;
 import com.stacktobasics.wownamechecker.profile.service.ProfileService;
 import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
@@ -88,6 +89,7 @@ class AlertControllerTest {
     public void addAlertValidTest() throws Exception {
         // arrange
         var alert = new AlertDTO(EMAIL, CHAR_NAME, REALM, REGION);
+        var character = new Character(CHAR_NAME, REALM, REGION);
 
         // act
         mockMvc.perform(post("/alert")
@@ -96,7 +98,8 @@ class AlertControllerTest {
                 .andExpect(status().isOk());
 
         // assert
-        Mockito.verify(alertService).addAlert(EMAIL, CHAR_NAME, REALM, REGION);
+
+        Mockito.verify(alertService).addAlert(EMAIL, character);
     }
 
     @Test

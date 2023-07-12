@@ -3,6 +3,7 @@ package com.stacktobasics.wownamechecker.alert.service;
 import com.stacktobasics.wownamechecker.alert.domain.Subscription;
 import com.stacktobasics.wownamechecker.alert.domain.SubscriptionRepository;
 import com.stacktobasics.wownamechecker.infra.clients.ProfileDTO;
+import com.stacktobasics.wownamechecker.profile.domain.Character;
 import com.stacktobasics.wownamechecker.profile.service.ProfileService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -37,9 +38,10 @@ class AlertServiceTest {
         when(subscriptionRepository.existsByEmailAndNameAndRealmAndRegion(email, CHAR_NAME, REALM, REGION))
                 .thenReturn(true);
         when(profileService.getCachedProfile(CHAR_NAME, REALM, REGION)).thenReturn(Optional.of(new ProfileDTO(1, 1234)));
+        var character = new Character(CHAR_NAME, REALM, REGION);
         
         // act
-        alertService.addAlert(email, CHAR_NAME, REALM, REGION);
+        alertService.addAlert(email, character);
         
         // assert
         Mockito.verify(subscriptionRepository, never()).save(Mockito.any());
@@ -53,9 +55,10 @@ class AlertServiceTest {
         when(subscriptionRepository.existsByEmailAndNameAndRealmAndRegion(email, CHAR_NAME, REALM, REGION))
                 .thenReturn(false);
         when(profileService.getCachedProfile(CHAR_NAME, REALM, REGION)).thenReturn(Optional.empty());
+        var character = new Character(CHAR_NAME, REALM, REGION);
 
         // act
-        alertService.addAlert(email, CHAR_NAME, REALM, REGION);
+        alertService.addAlert(email, character);
 
         // assert
         Mockito.verify(subscriptionRepository, never()).save(Mockito.any());
@@ -70,9 +73,10 @@ class AlertServiceTest {
                 .thenReturn(false);
         when(profileService.getCachedProfile(CHAR_NAME, REALM, REGION)).thenReturn(Optional.of(new ProfileDTO(1, 1234)));
         Subscription expected = new Subscription(email, CHAR_NAME, REALM, REGION);
+        var character = new Character(CHAR_NAME, REALM, REGION);
 
         // act
-        alertService.addAlert(email, CHAR_NAME, REALM, REGION);
+        alertService.addAlert(email, character);
 
         // assert
         Mockito.verify(subscriptionRepository).save(captor.capture());

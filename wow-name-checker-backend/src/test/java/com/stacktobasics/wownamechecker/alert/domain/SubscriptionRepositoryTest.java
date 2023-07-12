@@ -81,4 +81,14 @@ class SubscriptionRepositoryTest {
         Assertions.assertThat(actual).usingRecursiveFieldByFieldElementComparator().containsExactlyInAnyOrderElementsOf(expected);
     }
 
+    @Test
+    @DisplayName("deleteAllByEmail with multiple records deletes all records with that email address")
+    public void deleteAllByEmailTest() {
+        // arrange
+
+        // act
+
+        // assert
+    }
+
 }

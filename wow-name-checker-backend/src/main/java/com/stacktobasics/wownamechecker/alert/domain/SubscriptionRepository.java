@@ -14,4 +14,6 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, UUID
     List<RealmAndRegion> getDistinctRealmAndRegionPairs();
 
     List<Subscription> findByRealmAndRegion(String realm, String region);
+
+    void deleteAllByEmail(String email);
 }

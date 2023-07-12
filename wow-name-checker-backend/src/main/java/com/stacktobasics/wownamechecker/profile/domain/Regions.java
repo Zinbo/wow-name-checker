@@ -1,4 +1,4 @@
-package com.stacktobasics.wownamechecker.profile.api;
+package com.stacktobasics.wownamechecker.profile.domain;
 
 import jakarta.validation.constraints.NotNull;
 

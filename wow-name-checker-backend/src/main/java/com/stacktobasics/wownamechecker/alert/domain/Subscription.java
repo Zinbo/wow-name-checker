@@ -25,7 +25,7 @@ public class Subscription {
 
     public Subscription(@NonNull String email, @NonNull String name, @NonNull String realm, @NonNull String region) {
         this.id = UUID.randomUUID();
-        this.email = email;
+        this.email = email.toLowerCase();
         this.name = name;
         this.region = region;
         this.realm = realm;
