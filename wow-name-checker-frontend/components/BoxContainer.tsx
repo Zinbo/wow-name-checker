@@ -31,7 +31,7 @@ export default ({children}: Props) => {
         >
             {children}
 
-            <div style={{
+            <Box sx={{
                 zIndex: '-1',
                 backgroundColor: '#183685',
                 border: '2px solid #F8B700',
@@ -42,7 +42,7 @@ export default ({children}: Props) => {
                 right: '-9px'
             }}
             />
-            <div style={{
+            <Box sx={{
                 zIndex: '-2',
                 backgroundColor: '#74000D',
                 border: '2px solid #F8B700',

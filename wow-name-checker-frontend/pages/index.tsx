@@ -7,6 +7,7 @@ import lifecraftFont from "@/utils/lifecraftFont";
 import Box from "@mui/material/Box";
 import * as yup from "yup";
 import {useFormik} from "formik";
+import {styled} from "@mui/system";
 
 export async function getStaticProps() {
     const servers = getServers();
@@ -25,6 +26,10 @@ interface FormValues {
     name: string
     server: Server | null
 }
+
+const Form = styled('form')({
+    flex: 1, display: 'flex', flexDirection: 'column'
+})
 
 export default ({servers}: Props) => {
     const router = useRouter();
@@ -66,16 +71,13 @@ export default ({servers}: Props) => {
                 WoW Name Checker
             </Typography>
 
-            <form onSubmit={formik.handleSubmit}
-                  style={{flex: 1, display: 'flex', flexDirection: 'column'}}>
+            <Form onSubmit={formik.handleSubmit}>
                 <Box sx={{
                     flex: 1,
                     display: 'flex',
                     justifyContent: 'center',
-                    alignItems: 'center',
                     mb: 3,
-                    ml: 2,
-                    mr: 2
+                    mx: 2
                 }}>
                     <TextField id="name"
                                name="name"
@@ -99,7 +101,7 @@ export default ({servers}: Props) => {
                         getOptionLabel={(option) => `${option.realm} (${option.region})`}
                         value={formik.values.server}
                         onChange={(event: any, newValue: Server | null) => formik.setFieldValue('server', newValue)}
-                        style={{width: "50%", flex: 1}}
+                        sx={{width: '50%', flex: 1}}
                         onBlur={formik.handleBlur}
                         renderInput={(params) => <TextField name="server" {...params} label="Realm"
                                                             style={{width: "100%"}}
@@ -108,7 +110,7 @@ export default ({servers}: Props) => {
                     />
                 </Box>
                 <Button color='secondary' variant="contained" type="submit" sx={{alignSelf: 'center'}}>Search</Button>
-            </form>
+            </Form>
 
         </BoxContainer>
     )
