@@ -3,14 +3,15 @@ import {CloseIcon} from "next/dist/client/components/react-dev-overlay/internal/
 import React from "react";
 
 interface Props {
-    hasError: boolean
-    setHasError ?: (hasError: boolean) => void
+    open: boolean
+    onClose ?: (hasError: boolean) => void
     errorTitle: string
 }
-export default ({hasError, setHasError, errorTitle}: Props) => {
+export default ({open, onClose, errorTitle}: Props) => {
+
     return (<Dialog
-        open={hasError}
-        onClose={setHasError ? () => setHasError(false) : () => {}}
+        open={open}
+        onClose={onClose ? () => onClose(false) : () => {}}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         PaperProps={{
@@ -25,9 +26,9 @@ export default ({hasError, setHasError, errorTitle}: Props) => {
             <Typography sx={{mr: 5, fontWeight: 'bold'}}>
                 {errorTitle}
             </Typography>
-            {setHasError && <IconButton
+            {onClose && <IconButton
                 aria-label="close"
-                onClick={() => setHasError(false)}
+                onClick={() => onClose(false)}
                 sx={{
                     position: 'absolute',
                     right: 8,

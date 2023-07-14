@@ -6,6 +6,7 @@ import * as yup from "yup";
 import {useFormik} from "formik";
 import ErrorDialog from "@/components/ErrorDialog";
 import LoadingScreen from "@/components/LoadingScreen";
+import {styled} from "@mui/system";
 
 interface Props {
     title: string
@@ -14,6 +15,10 @@ interface Props {
     dto?: object
     url: string
 }
+
+const Form = styled('form')({
+    flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'baseline'
+})
 
 export default ({title, subTitle, actionName, dto, url}: Props) => {
     const [actionCompleted, setActionCompleted] = React.useState(false);
@@ -66,14 +71,13 @@ export default ({title, subTitle, actionName, dto, url}: Props) => {
             </Typography>
 
 
-            <Box sx={{flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 2}}>
+            <Box sx={{flex: 1, display: 'flex', justifyContent: 'center', mt: 2}}>
                 {actionCompleted && <Typography variant="h2" gutterBottom sx={{
                     fontSize: '36px',
                     alignSelf: 'center'
                 }}>{actionName}d successfully!</Typography>}
                 {!actionCompleted && (
-                    <form onSubmit={formik.handleSubmit}
-                          style={{flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                    <Form onSubmit={formik.handleSubmit}>
                         <TextField id="email"
                                    name="email"
                                    label="Email"
@@ -90,8 +94,8 @@ export default ({title, subTitle, actionName, dto, url}: Props) => {
                         />
                         <Button color='secondary' variant="contained" type="submit"
                                 disabled={isLoading}>{actionName}</Button>
-                    </form>)}
-                {hasError && <ErrorDialog hasError={hasError} setHasError={setHasError} errorTitle={`Could not ${actionName.toLowerCase()} email`}/>}
+                    </Form>)}
+                {hasError && <ErrorDialog open={hasError} onClose={setHasError} errorTitle={`Could not ${actionName.toLowerCase()} email`}/>}
             </Box>
         </BoxContainer>);
 }

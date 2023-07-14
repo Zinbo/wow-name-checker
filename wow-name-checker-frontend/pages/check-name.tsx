@@ -9,7 +9,7 @@ export default function Results() {
     const router = useRouter();
     const {name, region, realm} = router.query;
     const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState(false);
 
     const callAPI = async () => {
         const res = await fetch(`/profile?name=${name}&region=${region}&realm=${realm}`);
@@ -17,18 +17,21 @@ export default function Results() {
         else if (res.ok) {
             setIsAvailable(false);
         } else {
-            const data = await res.json();
-            setError(data);
-            console.log(data);
+            setError(true);
         }
     };
 
     useEffect(() => {
-        if(router.isReady && !!name && !!region && !!realm) callAPI();
+        if (router.isReady && !!name && !!region && !!realm) callAPI();
     }, [router.isReady]);
 
+    const invalidData = error || !name || !region || !realm || typeof name !== "string" || typeof region !== "string" || typeof realm !== "string";
+
     const Result = () => {
-        if (!!error || !name || !region || !realm || typeof name !== "string" || typeof region !== "string" ||typeof realm !== "string") return <ErrorDialog errorTitle="Could not load WoW Character" hasError={true} />
+        if (invalidData) return <ErrorDialog errorTitle="Could not load WoW Character" open={true} onClose={() => {
+            setError(false);
+            router.push('/');
+        }}/>
 
         const isLoading = isAvailable === null;
         if (isLoading) return <LoadingScreen isLoading={isLoading}/>;
