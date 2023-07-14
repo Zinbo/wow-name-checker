@@ -69,11 +69,11 @@ class AlertServiceTest {
     public void addAlertTest() {
         // arrange
         String email = "hello@email.com";
-        when(subscriptionRepository.existsByEmailAndNameAndRealmAndRegion(email, CHAR_NAME, REALM, REGION))
-                .thenReturn(false);
-        when(profileService.getCachedProfile(CHAR_NAME, REALM, REGION)).thenReturn(Optional.of(new ProfileDTO(1, 1234)));
-        Subscription expected = new Subscription(email, CHAR_NAME, REALM, REGION);
         var character = new Character(CHAR_NAME, REALM, REGION);
+        when(subscriptionRepository.existsByEmailAndNameAndRealmAndRegion(email, character.name(), character.realm(), character.region()))
+                .thenReturn(false);
+        when(profileService.getCachedProfile(character.name(), character.realm(), character.region())).thenReturn(Optional.of(new ProfileDTO(1, 1234)));
+        Subscription expected = new Subscription(email, character.name(), character.realm(), character.region());
 
         // act
         alertService.addAlert(email, character);
@@ -83,6 +83,19 @@ class AlertServiceTest {
         Assertions.assertThat(captor.getValue()).usingRecursiveComparison()
                 .ignoringFields("id")
                 .isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("unsubscribe with email calls delete on repository")
+    public void unsubscribeTest() {
+        // arrange
+        var email = "email";
+
+        // act
+        alertService.unsubscribe(email);
+
+        // assert
+        Mockito.verify(subscriptionRepository).deleteAllByEmail(email);
     }
     
 }

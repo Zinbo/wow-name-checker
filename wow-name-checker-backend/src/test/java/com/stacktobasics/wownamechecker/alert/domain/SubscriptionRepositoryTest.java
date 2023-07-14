@@ -85,10 +85,19 @@ class SubscriptionRepositoryTest {
     @DisplayName("deleteAllByEmail with multiple records deletes all records with that email address")
     public void deleteAllByEmailTest() {
         // arrange
+        String email = "hello@email.com";
+        var subsToDelete = List.of(new Subscription(email, "Zinbaan", "Argent-Dawn", "eu"),
+                new Subscription(email, "Zinbo", "Argent-Dawn", "eu"));
+        var expected = new Subscription("hello2@email.com", "Zinbo", "Argent-Dawn", "eu");
+        subscriptionRepository.saveAll(subsToDelete);
+        subscriptionRepository.save(expected);
 
         // act
+        subscriptionRepository.deleteAllByEmail(email);
+        var actual = subscriptionRepository.findAll();
 
         // assert
+        Assertions.assertThat(actual).usingRecursiveFieldByFieldElementComparator().containsExactly(expected);
     }
 
 }

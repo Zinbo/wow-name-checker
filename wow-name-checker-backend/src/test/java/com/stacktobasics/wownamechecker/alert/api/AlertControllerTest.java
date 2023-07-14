@@ -1,19 +1,13 @@
 package com.stacktobasics.wownamechecker.alert.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stacktobasics.wownamechecker.alert.infra.AlertScheduler;
 import com.stacktobasics.wownamechecker.alert.service.AlertService;
-import com.stacktobasics.wownamechecker.infra.clients.ProfileDTO;
 import com.stacktobasics.wownamechecker.infra.config.SecurityConfig;
 import com.stacktobasics.wownamechecker.infra.exceptionhandler.CorrelationIDHandler;
-import com.stacktobasics.wownamechecker.infra.exceptionhandler.ExceptionResponse;
-import com.stacktobasics.wownamechecker.profile.api.ProfileController;
 import com.stacktobasics.wownamechecker.profile.domain.Character;
-import com.stacktobasics.wownamechecker.profile.service.ProfileService;
 import org.assertj.core.api.Assertions;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -24,19 +18,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 import java.util.stream.Stream;
 
 import static com.stacktobasics.wownamechecker.TestHelper.*;
-import static com.stacktobasics.wownamechecker.TestHelper.REALM;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AlertController.class)
@@ -82,6 +70,23 @@ class AlertControllerTest {
 
         // assert
         Assertions.assertThat(actual).isEqualTo(expectedMessage);
+    }
+
+    @Test
+    @DisplayName("unsubscribe with dto calls service")
+    public void unsubscribeTest() throws Exception {
+        // arrange
+        String email = "email";
+        var dto = new UnsubscribeDTO(email);
+
+        // act
+        mockMvc.perform(post("/alert/unsubscribe")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isOk());
+
+        // assert
+        Mockito.verify(alertService).unsubscribe(email);
     }
 
     @Test
