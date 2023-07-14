@@ -1,4 +1,4 @@
-import {AppBar, Button, Toolbar, Typography} from "@mui/material";
+import {AppBar, Toolbar, Typography} from "@mui/material";
 import React from "react";
 import lifecraftFont from "@/utils/lifecraftFont";
 import Link from "next/link";
@@ -13,7 +13,5 @@ export default () => (<AppBar position="static" sx={{borderBottom: '2px solid #F
                     className={lifecraftFont.className} color={"text.primary"}>
             <Link href={"/"} style={{ textDecoration: 'none', color: 'inherit' }}>WoW Name Checker</Link>
         </Typography>
-        <Button color="inherit">Blog</Button>
-        <Button color="inherit">About</Button>
     </Toolbar>
 </AppBar>)
