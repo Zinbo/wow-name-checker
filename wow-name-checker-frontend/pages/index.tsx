@@ -109,7 +109,7 @@ export default ({servers}: Props) => {
                                                             helperText={formik.touched.server && formik.errors.server}/>}
                     />
                 </Box>
-                <Button color='secondary' variant="contained" type="submit" sx={{alignSelf: 'center'}}>Search</Button>
+                <Button id="submit" color='secondary' variant="contained" type="submit" sx={{alignSelf: 'center'}}>Search</Button>
             </Form>
 
         </BoxContainer>

@@ -62,17 +62,17 @@ export default ({title, subTitle, actionName, dto, url}: Props) => {
     return (
         <BoxContainer>
             <LoadingScreen isLoading={isLoading}/>
-            <Typography variant="h1" gutterBottom color='text.secondary'
+            <Typography id="title" variant="h1" gutterBottom color='text.secondary'
                         sx={{fontWeight: 'bold', fontSize: '40px', alignSelf: 'center', textAlign: 'center'}}>
                 {title}
             </Typography>
-            <Typography variant="h2" gutterBottom color='text.secondary' sx={{fontSize: '36px', alignSelf: 'center'}}>
+            <Typography id="subtitle" variant="h2" gutterBottom color='text.secondary' sx={{fontSize: '36px', alignSelf: 'center'}}>
                 {subTitle}
             </Typography>
 
 
             <Box sx={{flex: 1, display: 'flex', justifyContent: 'center', mt: 2}}>
-                {actionCompleted && <Typography variant="h2" gutterBottom sx={{
+                {actionCompleted && <Typography id="successText" variant="h2" gutterBottom sx={{
                     fontSize: '36px',
                     alignSelf: 'center'
                 }}>{actionName}d successfully!</Typography>}
@@ -92,7 +92,7 @@ export default ({title, subTitle, actionName, dto, url}: Props) => {
                                    helperText={formik.touched.email && formik.errors.email}
                                    disabled={isLoading}
                         />
-                        <Button color='secondary' variant="contained" type="submit"
+                        <Button id='submit' color='secondary' variant="contained" type="submit"
                                 disabled={isLoading}>{actionName}</Button>
                     </Form>)}
                 {hasError && <ErrorDialog open={hasError} onClose={setHasError} errorTitle={`Could not ${actionName.toLowerCase()} email`}/>}
